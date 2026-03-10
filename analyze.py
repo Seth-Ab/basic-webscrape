@@ -60,8 +60,8 @@ def compute_scores(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+# Entry point: load, score, and write output CSV.
 def main() -> None:
-    # Entry point: load, score, and write output CSV.
     if not os.path.exists(STATS_CSV):
         print(f"stats.csv not found at {STATS_CSV}; run scrape.py first.")
         return

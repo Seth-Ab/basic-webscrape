@@ -1,4 +1,4 @@
-"""Scrape big tech ratios from StockAnalysis into data/stats.csv."""
+# Scrape big tech ratios from StockAnalysis into data/stats.csv.
 
 import csv
 import os
@@ -10,14 +10,17 @@ from bs4 import BeautifulSoup
 
 from config import TICKERS, BASE_URL_TEMPLATE, METRIC_FIELDS
 
-# Output locations for scraped CSV data.
+# Absolute path to data directory
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+
+# Absolute path to the stats.csv file where scraped stats will be saved.
 STATS_CSV = os.path.join(DATA_DIR, "stats.csv")
 
 # Be polite to the host.
 REQUEST_DELAY_SECONDS = 1.5
 # Read user agent from environment so personal info isn't committed.
 USER_AGENT = os.getenv(
+    # Try user-provided agent, otherwise use a generic one.
     "SCRAPER_USER_AGENT",
     "webscrape-data/1.0 (contact: you@example.com)",
 )
@@ -44,9 +47,8 @@ def _fetch_html(ticker: str) -> str:
     resp.raise_for_status()
     return resp.text
 
-
+# Normalize common numeric formats (commas, percents, N/A).
 def _to_number(text: str) -> Optional[float]:
-    # Normalize common numeric formats (commas, percents, N/A).
     t = text.strip()
     if not t or t in {"-", "N/A"}:
         return None
@@ -62,12 +64,9 @@ def _to_number(text: str) -> Optional[float]:
         return None
 
 
+# Extract metrics from the StockAnalysis ratios table.
+# look for a table that contains a "Current" column and then map row labels to our fields.
 def _parse_metrics(html: str, ticker: str) -> Optional[Dict[str, float]]:
-    """Extract metrics from the StockAnalysis ratios table.
-
-    We look for a table that contains a "Current" column and then map
-    row labels to our fields.
-    """
     # Parse the raw HTML into a BeautifulSoup object so we can navigate it
     soup = BeautifulSoup(html, "html.parser")
 
@@ -145,8 +144,8 @@ def _parse_metrics(html: str, ticker: str) -> Optional[Dict[str, float]]:
     return metrics
 
 
+# Iterate through tickers, scrape metrics, and write a CSV.
 def scrape_all() -> None:
-    # Iterate through tickers, scrape metrics, and write a CSV.
     os.makedirs(DATA_DIR, exist_ok=True)
 
     rows = []
