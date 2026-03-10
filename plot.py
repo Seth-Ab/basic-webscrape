@@ -1,0 +1,53 @@
+"""Plot value vs quality for scraped big tech stocks."""
+
+import os
+
+import matplotlib.pyplot as plt
+import pandas as pd
+
+from config import SECTOR_NAME
+
+DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+SCORED_CSV = os.path.join(DATA_DIR, "scored.csv")
+PLOTS_DIR = os.path.join(os.path.dirname(__file__), "plots")
+
+
+def main() -> None:
+    # Entry point: load scored data and render the scatter plot.
+    if not os.path.exists(SCORED_CSV):
+        print(f"scored.csv not found at {SCORED_CSV}; run analyze.py first.")
+        return
+
+    # Read the computed scores.
+    df = pd.read_csv(SCORED_CSV)
+
+    # Ensure output directory exists.
+    os.makedirs(PLOTS_DIR, exist_ok=True)
+
+    # Create the scatter plot.
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    x = df["value_score"]
+    y = df["quality_score"]
+
+    ax.scatter(x, y)
+
+    # Label each point with its ticker.
+    for _, row in df.iterrows():
+        ax.text(row["value_score"], row["quality_score"], row["ticker"],
+                fontsize=9, ha="center", va="bottom")
+
+    # Axis labels and title for readability.
+    ax.set_xlabel("Value score (higher = cheaper)")
+    ax.set_ylabel("Quality score (higher = better fundamentals)")
+    ax.set_title(f"{SECTOR_NAME} – Value vs Quality")
+
+    # Save the image to disk.
+    plt.tight_layout()
+    out_path = os.path.join(PLOTS_DIR, "value_vs_quality.png")
+    fig.savefig(out_path, dpi=150)
+    print(f"Saved plot to {out_path}")
+
+
+if __name__ == "__main__":
+    main()
