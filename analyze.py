@@ -1,8 +1,5 @@
-"""Compute simple value/quality scores from scraped stats.
-
-Reads data/stats.csv, computes value_score and quality_score, writes
-data/scored.csv.
-"""
+# This script computes simple "value" and "quality" scores for each stock
+# based on the metrics scraped in stats.csv, and writes the results to scored.csv.
 
 import os
 
@@ -10,7 +7,10 @@ import pandas as pd
 
 from config import METRIC_FIELDS
 
+# Absolute path to data directory
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+
+# Absolute paths to input (stats) and output (scored) CSV files.
 STATS_CSV = os.path.join(DATA_DIR, "stats.csv")
 SCORED_CSV = os.path.join(DATA_DIR, "scored.csv")
 
