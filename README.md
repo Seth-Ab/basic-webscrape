@@ -1,4 +1,4 @@
-# webscrape-data – Big Tech Valuation Map
+# Basic Webscrape :: Big Tech Valuation Map
 
 Goal: scrape key ratios for a small universe of big tech stocks from
 StockAnalysis (static HTML), compute simple value/quality scores, and
