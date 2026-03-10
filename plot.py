@@ -44,7 +44,7 @@ def main() -> None:
     # Axis labels and title for readability.
     ax.set_xlabel("Value score (higher = cheaper)")
     ax.set_ylabel("Quality score (higher = better fundamentals)")
-    ax.set_title(f"{SECTOR_NAME} – Value vs Quality")
+    ax.set_title(f"{SECTOR_NAME} - Value vs Quality")
 
     # Save the image to disk.
     plt.tight_layout()
